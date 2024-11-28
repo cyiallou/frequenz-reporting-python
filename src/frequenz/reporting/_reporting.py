@@ -4,7 +4,7 @@
 """A highlevel interface for the reporting API."""
 
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from frequenz.client.common.metric import Metric
 from frequenz.client.reporting import ReportingApiClient
@@ -24,7 +24,7 @@ async def cumulative_energy(
     start_time: datetime,
     end_time: datetime,
     use_active_power: bool,
-    resolution: int | None = None,
+    resampling_period: timedelta | None,
 ) -> CumulativeEnergy:
     """
     Calculate the cumulative energy consumption and production over a specified time range.
@@ -37,8 +37,7 @@ async def cumulative_energy(
         end_time: The end date and time for the period.
         use_active_power: If True, use the 'AC_ACTIVE_POWER' metric.
                           If False, use the 'AC_ACTIVE_ENERGY' metric.
-        resolution: The resampling resolution for the data, represented in seconds.
-                    If None, no resampling is applied.
+        resampling_period: The period for resampling the data.If None, no resampling is applied.
     Returns:
         EnergyMetric: A named tuple with start_time, end_time, consumption, and production
         in Wh. Consumption has a positive sign, production has a negative sign.
@@ -52,7 +51,7 @@ async def cumulative_energy(
             metrics=metric,
             start_dt=start_time,
             end_dt=end_time,
-            resolution=resolution,
+            resampling_period=resampling_period,
         )
     ]
 

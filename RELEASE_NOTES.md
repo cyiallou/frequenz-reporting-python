@@ -7,6 +7,7 @@
 ## Upgrading
 
 * Upgraded reporting client to v0.9.0
+* Change from resolution to resampling_period
 
 ## New Features
 
