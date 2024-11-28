@@ -98,26 +98,46 @@ async def cumulative_energy(
             production += last_value_production
 
         else:
-            # Directly use energy values if using AC_ACTIVE_ENERGY
-            consumption = sum(
-                m2.value - m1.value
-                for m1, m2 in zip(metric_samples, metric_samples[1:])
-                if m2.value - m1.value > 0
-            )
-            production = sum(
-                m2.value - m1.value
-                for m1, m2 in zip(metric_samples, metric_samples[1:])
-                if m2.value - m1.value < 0
+            # Fetch energy consumption and production metrics separately
+            consumption_samples = [
+                sample
+                async for sample in client.list_microgrid_components_data(
+                    microgrid_components=[(microgrid_id, [component_id])],
+                    metrics=Metric.AC_ACTIVE_ENERGY_CONSUMED,
+                    start_dt=start_time,
+                    end_dt=end_time,
+                    resampling_period=resampling_period,
+                )
+            ]
+
+            production_samples = [
+                sample
+                async for sample in client.list_microgrid_components_data(
+                    microgrid_components=[(microgrid_id, [component_id])],
+                    metrics=Metric.AC_ACTIVE_ENERGY_DELIVERED,
+                    start_dt=start_time,
+                    end_dt=end_time,
+                    resampling_period=resampling_period,
+                )
+            ]
+
+            consumption = (
+                sum(
+                    max(0, m2.value - m1.value)
+                    for m1, m2 in zip(consumption_samples, consumption_samples[1:])
+                )
+                if len(consumption_samples) > 1
+                else float("nan")
             )
 
-            if len(metric_samples) > 1:
-                last_value_diff = metric_samples[-1].value - metric_samples[-2].value
-                if last_value_diff > 0:
-                    consumption += last_value_diff
-                elif last_value_diff < 0:
-                    production += last_value_diff
-    else:
-        consumption = production = float("nan")
+            production = (
+                sum(
+                    max(0, m2.value - m1.value)
+                    for m1, m2 in zip(production_samples, production_samples[1:])
+                )
+                if len(production_samples) > 1
+                else float("nan")
+            )
 
     return CumulativeEnergy(
         start_time=start_time,

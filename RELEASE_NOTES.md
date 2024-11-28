@@ -13,6 +13,7 @@
 
 * Add Readme information
 * Added functionality to extract state durations and filter alerts.
+* Energy metrics updated to METRIC_AC_ACTIVE_ENERGY_CONSUMED and METRIC_AC_ACTIVE_ENERGY_DELIVERED for independent tracking of consumption and production.
 
 ## Bug Fixes
 
