@@ -12,6 +12,7 @@
 ## New Features
 
 * Add Readme information
+* Added functionality to extract state durations and filter alerts.
 
 ## Bug Fixes
 
