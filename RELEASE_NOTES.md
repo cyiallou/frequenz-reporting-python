@@ -6,16 +6,12 @@
 
 ## Upgrading
 
-* Upgraded reporting client to v0.9.0
-* Change from resolution to resampling_period
+<!-- Here goes notes on how to upgrade from previous versions, including deprecations and what they should be replaced with -->
 
 ## New Features
 
-* Add Readme information
-* Added functionality to extract state durations and filter alerts.
-* Energy metrics updated to METRIC_AC_ACTIVE_ENERGY_CONSUMED and METRIC_AC_ACTIVE_ENERGY_DELIVERED for independent tracking of consumption and production.
+<!-- Here goes the main new features and examples or instructions on how to use them -->
 
 ## Bug Fixes
 
-* Change 0.0 to nan if there is no data available
-* Enforce keyword arguments in cumulative_energy function
+<!-- Here goes notable bug fixes that are worth a special mention or explanation -->
